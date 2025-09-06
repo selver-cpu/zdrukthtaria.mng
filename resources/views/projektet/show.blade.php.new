@@ -1,0 +1,85 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Detajet e Projektit') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Project Details Section -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <h3 class="text-lg font-semibold mb-4">Informacione të Përgjithshme</h3>
+                    
+                    <!-- Basic project info -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p><strong>Emri i Projektit:</strong> {{ $projekt->emri_projektit }}</p>
+                            <p><strong>Klienti:</strong> {{ $projekt->klient->emri ?? 'N/A' }}</p>
+                            <p><strong>Data e Fillimit:</strong> {{ $projekt->data_fillimit ? $projekt->data_fillimit->format('d.m.Y') : 'N/A' }}</p>
+                            <p><strong>Data e Përfundimit:</strong> {{ $projekt->data_perfundimit ? $projekt->data_perfundimit->format('d.m.Y') : 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <p><strong>Statusi:</strong> {{ $projekt->statusi_projektit->emri ?? 'N/A' }}</p>
+                            <p><strong>Mjeshtri:</strong> {{ $projekt->mjeshtri->name ?? 'N/A' }}</p>
+                            <p><strong>Montuesi:</strong> {{ $projekt->montuesi->name ?? 'N/A' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phases Section -->
+            <div class="mt-8 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <h3 class="text-lg font-semibold mb-4">Fazat e Projektit</h3>
+                    
+                    <!-- Display existing phases -->
+                    <div class="space-y-4">
+                        @forelse ($projekt->fazat->sortBy('renditja') as $faza)
+                            <div class="p-4 border rounded-lg shadow-sm">
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                                    <div class="md:col-span-2">
+                                        <p class="font-bold text-gray-800">{{ $faza->emri_fazes }}</p>
+                                        <p class="text-sm text-gray-500">{{ $faza->pershkrimi }}</p>
+                                    </div>
+                                    <div>
+                                        <p><strong>Statusi:</strong> {{ $faza->pivot->statusi_fazes }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-gray-500">Nuk ka faza të shtuara për këtë projekt.</p>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materials Section -->
+            <div class="mt-8 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <h3 class="text-lg font-semibold mb-4">Materialet e Projektit</h3>
+                    
+                    <!-- Display existing materials -->
+                    <div class="space-y-4">
+                        @if($projekt->materialet->isEmpty())
+                            <p class="text-gray-500">Nuk ka materiale të shtuara për këtë projekt.</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents Section -->
+            <div class="mt-8 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <h3 class="text-lg font-semibold mb-4">Dokumentet e Projektit</h3>
+                    
+                    <!-- Upload Form -->
+                    @can('update', $projekt)
+                        <!-- Upload form placeholder -->
+                    @endcan
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
