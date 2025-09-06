@@ -100,6 +100,38 @@ Ky është një sistem i zhvilluar me Laravel për menaxhimin e projekteve në n
 
 [Emri Juaj]
 
+## 🚀 Quick Deployment
+
+Për deployment të shpejtë në VPS, shiko [DEPLOYMENT.md](DEPLOYMENT.md) për udhëzime të detajuara.
+
+### Git Repository
+
+```bash
+# Clone repository
+git clone <repository-url>
+cd carpentry-app
+
+# Install dependencies
+composer install
+npm install && npm run build
+
+# Setup environment
+cp .env.example .env
+php artisan key:generate
+
+# Run migrations
+php artisan migrate
+```
+
+### Server Requirements
+- PHP 8.3+
+- PostgreSQL 13+
+- Nginx/Apache
+- Node.js 18+
+- Composer
+
+Për më shumë detaje, shiko [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ## 📄 Licenca
 
 Ky projekt është i licencuar nën licencën MIT - shikoni skedarin [LICENSE](LICENSE) për detaje.
