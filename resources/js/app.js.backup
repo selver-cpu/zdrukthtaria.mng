@@ -1,0 +1,15 @@
+import './bootstrap';
+import './echo';
+import './notifications';
+
+// Importo modulin e prekjes
+import './touch-handler';
+// Përfshi përmirësimet e dashboard-it në bundle-in kryesor
+import './dashboard-enhancements';
+
+import Alpine from 'alpinejs';
+
+window.Alpine = Alpine;
+
+Alpine.start();
+

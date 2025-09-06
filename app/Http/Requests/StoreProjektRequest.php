@@ -9,7 +9,7 @@ class StoreProjektRequest extends FormRequest
     public function authorize()
     {
         // Kontrollo nëse përdoruesi ka të drejtë të krijojë projekt
-        return auth()->user()->can('create', Projekti::class);
+        return auth()->user()->can('create', \App\Models\Projektet::class);
     }
 
     public function rules()
@@ -17,18 +17,18 @@ class StoreProjektRequest extends FormRequest
         return [
             'emri_projektit' => 'required|string|max:255',
             'pershkrimi' => 'nullable|string',
-            'klient_id' => 'required|exists:Klientet,klient_id',
+            'klient_id' => 'required|exists:klientet,klient_id',
             'data_fillimit_parashikuar' => 'nullable|date',
             'data_perfundimit_parashikuar' => 'nullable|date|after_or_equal:data_fillimit_parashikuar',
             'data_perfundimit_real' => 'nullable|date',
-            'status_id' => 'required|exists:Statuset_Projektit,status_id',
+            'status_id' => 'required|exists:statuset_projektit,status_id',
             'mjeshtri_caktuar_id' => [
                 'nullable',
-                'exists:Perdoruesit,perdorues_id',
+                'exists:perdoruesit,perdorues_id',
                 function ($attribute, $value, $fail) {
                     if ($value) {
-                        $mjeshtri = \App\Models\Perdoruesi::find($value);
-                        if (!$mjeshtri || $mjeshtri->emri_rolit !== 'mjeshtër') {
+                        $mjeshtri = \App\Models\User::find($value);
+                        if (!$mjeshtri || !$mjeshtri->hasRole('mjeshtër')) {
                             $fail('Përdoruesi i zgjedhur nuk është mjeshtër.');
                         }
                     }
@@ -36,11 +36,11 @@ class StoreProjektRequest extends FormRequest
             ],
             'montuesi_caktuar_id' => [
                 'nullable',
-                'exists:Perdoruesit,perdorues_id',
+                'exists:perdoruesit,perdorues_id',
                 function ($attribute, $value, $fail) {
                     if ($value) {
-                        $montuesi = \App\Models\Perdoruesi::find($value);
-                        if (!$montuesi || $montuesi->emri_rolit !== 'montues') {
+                        $montuesi = \App\Models\User::find($value);
+                        if (!$montuesi || !$montuesi->hasRole('montues')) {
                             $fail('Përdoruesi i zgjedhur nuk është montues.');
                         }
                     }

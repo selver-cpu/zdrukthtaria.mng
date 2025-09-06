@@ -6,7 +6,6 @@
 
 .touch-scroll-table {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     position: relative;
 }
 
@@ -85,7 +84,6 @@ select {
 
 /* Improved scrolling on iOS */
 .touch-scroll {
-    -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
     overscroll-behavior-y: contain;
 }
@@ -152,7 +150,6 @@ select {
     max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
 }
 
 /* Touch-friendly buttons */
@@ -162,6 +159,7 @@ select {
     font-size: 1rem;
     font-weight: 500;
     touch-action: manipulation;
+    -webkit-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     transition: transform 0.1s ease;

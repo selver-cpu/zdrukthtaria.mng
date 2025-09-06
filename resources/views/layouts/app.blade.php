@@ -36,7 +36,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/dashboard-enhancements.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script>
             const userIdMeta = document.querySelector('meta[name="user-id"]');
             const userIdContent = userIdMeta ? userIdMeta.getAttribute('content') : null;
@@ -48,8 +48,11 @@
         
         <!-- Bootstrap JS Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+        
+        <!-- Alpine.js -->
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
-    <body class="font-sans antialiased h-full disable-pull-refresh touch-manipulation">
+    <body class="font-sans antialiased h-full bg-gray-100 disable-pull-refresh touch-manipulation">
         <x-touch-interface />
         <!-- Tap highlight color fix for mobile -->
         <style>

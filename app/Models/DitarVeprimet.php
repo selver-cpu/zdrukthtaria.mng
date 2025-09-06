@@ -18,7 +18,8 @@ class DitarVeprimet extends Model
         'veprimi',
         'objekt_id',
         'objekt_tipi',
-        'ip_adresa'
+        'ip_adresa',
+        'te_dhenat_e_reja'
     ];
 
     protected $casts = [

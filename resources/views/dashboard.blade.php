@@ -61,8 +61,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
-                    <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
-                        <button id="voice-search" class="p-2 text-gray-400 hover:text-blue-500 transition-colors touch-manipulation">
+                    <div class="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
+                        <button id="clear-search" class="p-2 text-gray-400 hover:text-gray-600 transition-colors touch-manipulation" title="Pastro">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                        <button id="voice-search" class="p-2 text-gray-400 hover:text-blue-500 transition-colors touch-manipulation" title="Kërkim me zë">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
                             </svg>
@@ -110,7 +115,7 @@
 
             <!-- Përmbajtja e Tab-eve -->
             <div id="content-overview" class="tab-content block">
-                <x-role-dashboard :role="$role" :stats="$stats" />
+                <x-role-dashboard :role="$role ?? 'administrator'" :stats="$stats ?? []" />
             </div>
 
             <!-- Recent Projects - Touch Optimized Cards -->
@@ -205,7 +210,7 @@
                                                 </a>
                                                 <a href="{{ route('projektet.edit', $projekt) }}" class="p-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors touch-manipulation transform active:scale-95">
                                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                                     </svg>
                                                 </a>
                                             </div>
@@ -244,7 +249,7 @@
                             <div class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 touch-manipulation">
                                 <div class="flex items-start justify-between mb-4">
                                     <h4 class="text-xl font-bold text-gray-800 line-clamp-2">{{ $projekt->emri_projektit }}</h4>
-                                    <span class="px-3 py-1 text-sm font-semibold rounded-full {{ getStatusColor($status->emri_statusit) }} ml-2 flex-shrink-0">
+                                    <span class="px-3 py-1 inline-flex text-base leading-5 font-semibold rounded-full {{ getStatusColor($status->emri_statusit) }} ml-2 flex-shrink-0">
                                         {{ $status->emri_statusit }}
                                     </span>
                                 </div>
@@ -540,10 +545,21 @@
                                         })->whereNull('status_id')->count();
                                     @endphp
                                     
+                                    @php
+                                        $maxStatus = 0;
+                                        if (!empty($stats['projektet_sipas_statusit']) && is_array($stats['projektet_sipas_statusit'])) {
+                                            $filtered = array_filter($stats['projektet_sipas_statusit'], fn($v) => is_numeric($v));
+                                            $maxStatus = !empty($filtered) ? max($filtered) : 0;
+                                        }
+                                        $width_pa_status = $maxStatus > 0 ? min(100, round(($projektet_pa_status / $maxStatus) * 100)) : 0;
+                                    @endphp
                                     @if($projektet_pa_status > 0)
                                     <div class="flex items-center mb-4">
                                         <div class="w-full bg-gray-200 rounded-full h-8">
-                                            <div class="h-2.5 rounded-full transition-all duration-500 ease-out" style="width: {{ ($projektet_pa_status / max(array_filter($stats['projektet_sipas_statusit']))) * 100 }}%; background-color: #808080;"></div>
+                                            @php
+                                                $safe_width = isset($width_pa_status) && is_numeric($width_pa_status) ? $width_pa_status : 0;
+                                            @endphp
+                                            <div class="h-2.5 rounded-full transition-all duration-500 ease-out bg-gray-500" style="width: <?php echo $safe_width; ?>%;"></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-12 col-sm-6 col-xl-3">
@@ -574,10 +590,20 @@
                                         @if($count > 0)
                                         <div class="flex items-center">
                                             <div class="w-full bg-gray-200 rounded-full h-8">
-                                                <div class="h-8 rounded-full" style="width: {{ $count * 10 }}%; background-color: {{ $status->ngjyra_statusit }};"></div>
+                                                @php
+                                                    $safe_count_width = isset($count) && is_numeric($count) ? min(100, $count * 10) : 0;
+                                                    $safe_bg_color = isset($status->ngjyra_statusit) ? $status->ngjyra_statusit : '#808080';
+                                                @endphp
+                                                <div class="h-8 rounded-full" 
+                                                     style="width: <?php echo $safe_count_width; ?>%; background-color: <?php echo $safe_bg_color; ?>;"></div>
                                             </div>
                                             <div class="ml-4 min-w-[100px]">
-                                                <span class="text-lg font-medium" style="color: {{ $status->ngjyra_statusit }};">{{ $status->emri_statusit }}</span>
+                                                @php
+                                                    $safe_text_color = isset($status->ngjyra_statusit) ? $status->ngjyra_statusit : '#808080';
+                                                    $safe_status_name = isset($status->emri_statusit) ? $status->emri_statusit : 'Status';
+                                                @endphp
+                                                <span class="text-lg font-medium" 
+                                                      style="color: <?php echo $safe_text_color; ?>;"><?php echo $safe_status_name; ?></span>
                                                 <span class="text-lg font-bold ml-2">{{ $count }}</span>
                                             </div>
                                         </div>
@@ -629,6 +655,7 @@
                 <button class="keyboard-key bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-4 rounded-lg m-1 min-w-[50px] text-xl">{{ $key }}</button>
                 @endforeach
                 <button class="keyboard-key bg-blue-200 hover:bg-blue-300 text-blue-800 font-semibold py-3 px-4 rounded-lg m-1 min-w-[120px] text-xl">Space</button>
+                <button class="keyboard-key bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-lg m-1 min-w-[120px] text-xl">Enter</button>
             </div>
             <div class="keyboard-row flex justify-center w-full">
                 <button id="close-keyboard" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg m-1 min-w-[200px] text-xl">Mbyll Tastierën</button>
@@ -636,7 +663,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {{-- @vite(['resources/js/dashboard-enhancements.js']) --}}
     <script>
         // Tab navigation functionality
         document.addEventListener('DOMContentLoaded', function() {
@@ -647,13 +674,13 @@
                 button.addEventListener('click', function() {
                     // Remove active class from all buttons
                     tabButtons.forEach(btn => {
-                        btn.classList.remove('active', 'bg-gradient-to-r', 'from-blue-50', 'to-blue-100', 'text-blue-700');
-                        btn.classList.add('bg-gray-50', 'text-gray-700');
+                        btn.classList.remove('active', 'bg-gradient-to-br', 'from-blue-500', 'to-blue-600', 'text-white', 'border-0', 'shadow-md');
+                        btn.classList.add('bg-gray-50', 'hover:bg-gray-100', 'text-gray-700', 'border', 'border-gray-200');
                     });
                     
                     // Add active class to clicked button
-                    this.classList.add('active', 'bg-gradient-to-r', 'from-blue-50', 'to-blue-100', 'text-blue-700');
-                    this.classList.remove('bg-gray-50', 'text-gray-700');
+                    this.classList.add('active', 'bg-gradient-to-br', 'from-blue-300', 'to-blue-600', 'text-white', 'border-0', 'shadow-md');
+                    this.classList.remove('bg-gray-50', 'hover:bg-gray-100', 'text-gray-700', 'border', 'border-gray-200');
                     
                     // Hide all tab contents
                     tabContents.forEach(content => {
@@ -693,7 +720,13 @@
                         labels: ['Në Proces', 'Përfunduar', 'Në Pritje', 'Anuluar', 'Në Pauzë'],
                         datasets: [{
                             label: 'Numri i Projekteve',
-                            data: [{{ $stats['projektet_aktive'] ?? 5 }}, {{ $stats['projektet_perfunduara_muaji'] ?? 3 }}, {{ $stats['projektet_ne_pritje'] ?? 2 }}, {{ $stats['projektet_anuluar'] ?? 1 }}, {{ $stats['projektet_ne_pauze'] ?? 1 }}],
+                            data: [
+                                <?php echo isset($stats['projektet_aktive']) && is_numeric($stats['projektet_aktive']) ? $stats['projektet_aktive'] : 0; ?>,
+                                <?php echo isset($stats['projektet_perfunduara_muaji']) && is_numeric($stats['projektet_perfunduara_muaji']) ? $stats['projektet_perfunduara_muaji'] : 0; ?>,
+                                <?php echo isset($stats['projektet_ne_pritje']) && is_numeric($stats['projektet_ne_pritje']) ? $stats['projektet_ne_pritje'] : 0; ?>,
+                                <?php echo isset($stats['projektet_anuluar']) && is_numeric($stats['projektet_anuluar']) ? $stats['projektet_anuluar'] : 0; ?>,
+                                <?php echo isset($stats['projektet_ne_pauze']) && is_numeric($stats['projektet_ne_pauze']) ? $stats['projektet_ne_pauze'] : 0; ?>
+                            ],
                             backgroundColor: [
                                 'rgba(54, 162, 235, 0.6)',
                                 'rgba(75, 192, 192, 0.6)',
@@ -748,14 +781,14 @@
                         labels: months,
                         datasets: [{
                             label: 'Projekte të Reja',
-                            data: [4, 6, 8, 5, 7, {{ $stats['projektet_muaji'] ?? 9 }}],
+                            data: [4, 6, 8, 5, 7, <?php echo isset($stats['projektet_muaji']) && is_numeric($stats['projektet_muaji']) ? $stats['projektet_muaji'] : 9; ?>],
                             backgroundColor: 'rgba(54, 162, 235, 0.2)',
                             borderColor: 'rgba(54, 162, 235, 1)',
                             borderWidth: 2,
                             tension: 0.3
                         }, {
                             label: 'Projekte të Përfunduara',
-                            data: [3, 5, 7, 4, 6, {{ $stats['projektet_perfunduara_muaji'] ?? 8 }}],
+                            data: [3, 5, 7, 4, 6, <?php echo isset($stats['projektet_perfunduara_muaji']) && is_numeric($stats['projektet_perfunduara_muaji']) ? $stats['projektet_perfunduara_muaji'] : 8; ?>],
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
                             borderColor: 'rgba(75, 192, 192, 1)',
                             borderWidth: 2,
@@ -799,6 +832,16 @@
                     activeInput = this;
                     virtualKeyboard.classList.remove('hidden');
                 });
+                
+                // Prevent keyboard from hiding when clicking on it
+                input.addEventListener('blur', function(e) {
+                    // Only hide keyboard if not clicking on keyboard keys
+                    setTimeout(() => {
+                        if (!document.activeElement.closest('#virtual-keyboard')) {
+                            virtualKeyboard.classList.add('hidden');
+                        }
+                    }, 150);
+                });
             });
             
             // Close keyboard button
@@ -812,20 +855,39 @@
             // Keyboard key press
             const keyboardKeys = document.querySelectorAll('.keyboard-key');
             keyboardKeys.forEach(key => {
-                key.addEventListener('click', function() {
+                // Prevent default behavior that might close keyboard
+                key.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                });
+                
+                key.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
                     if (!activeInput) return;
                     
-                    const keyValue = this.textContent;
+                    const keyValue = this.textContent.trim();
+                    
                     if (keyValue === '⌫') {
                         // Backspace functionality
                         activeInput.value = activeInput.value.slice(0, -1);
                     } else if (keyValue === 'Space') {
                         // Space functionality
                         activeInput.value += ' ';
+                    } else if (keyValue === 'Enter') {
+                        // Trigger search and hide keyboard
+                        if (typeof performSearch === 'function') {
+                            performSearch(activeInput.value.trim());
+                        }
+                        virtualKeyboard.classList.add('hidden');
+                        return;
                     } else {
-                        // Regular key press
+                        // Regular key press - add the character
                         activeInput.value += keyValue;
                     }
+                    
+                    // Keep focus on input and keep keyboard open
+                    activeInput.focus();
                     
                     // Trigger input event to update any listeners
                     const event = new Event('input', { bubbles: true });

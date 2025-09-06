@@ -36,8 +36,8 @@ class ProjektPolicy
      */
     public function create(User $user): bool
     {
-        // Vetëm menaxheri mund të krijojë projekte
-        return $user->rol_id === 2;
+        // Administratoret dhe menaxheret mund të krijojnë projekte
+        return in_array($user->rol_id, [1, 2]); // 1 = admin, 2 = menaxher
     }
 
     /**

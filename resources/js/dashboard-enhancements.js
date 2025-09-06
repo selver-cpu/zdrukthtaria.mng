@@ -15,11 +15,65 @@ document.addEventListener('DOMContentLoaded', function() {
             const query = e.target.value.trim();
             
             if (query.length >= 2) {
-                searchTimeout = setTimeout(() => performSearch(query), 300);
+                searchTimeout = setTimeout(() => performSearch(query), 250);
             } else {
                 hideSearchResults();
             }
         });
+
+        // Virtual Keyboard (for search)
+        const virtualKeyboard = document.getElementById('virtual-keyboard');
+        const closeKeyboardBtn = document.getElementById('close-keyboard');
+        let focusedInput = document.getElementById('global-search');
+
+        function showKeyboard() {
+            if (virtualKeyboard) virtualKeyboard.classList.remove('hidden');
+        }
+        function hideKeyboard() {
+            if (virtualKeyboard) virtualKeyboard.classList.add('hidden');
+        }
+
+        if (focusedInput) {
+            focusedInput.addEventListener('focus', showKeyboard);
+            focusedInput.addEventListener('blur', () => setTimeout(hideKeyboard, 150));
+        }
+
+        if (closeKeyboardBtn) {
+            closeKeyboardBtn.addEventListener('click', hideKeyboard);
+        }
+
+        if (virtualKeyboard) {
+            virtualKeyboard.addEventListener('click', function(e) {
+                const key = e.target.closest('.keyboard-key');
+                if (!key || !focusedInput) return;
+                const label = key.textContent.trim();
+                if (label === '⌫') {
+                    focusedInput.value = focusedInput.value.slice(0, -1);
+                    focusedInput.dispatchEvent(new Event('input'));
+                    return;
+                }
+                if (label.toLowerCase() === 'space') {
+                    focusedInput.value += ' ';
+                    focusedInput.dispatchEvent(new Event('input'));
+                    return;
+                }
+                if (label.toLowerCase() === 'enter') {
+                    // Trigger search immediately and hide keyboard
+                    if (typeof performSearch === 'function') {
+                        performSearch(focusedInput.value.trim());
+                    } else {
+                        // Fallback: submit nearest form if exists
+                        const form = focusedInput.closest('form');
+                        if (form) form.submit();
+                    }
+                    hideKeyboard();
+                    return;
+                }
+                // Default: append character
+                focusedInput.value += label;
+                focusedInput.dispatchEvent(new Event('input'));
+            });
+        }
         
         // Hide search results when clicking outside
         document.addEventListener('click', function(e) {

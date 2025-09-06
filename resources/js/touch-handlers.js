@@ -13,10 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         table.addEventListener('touchmove', (e) => {
             if (!startX) return;
-            e.preventDefault();
+            // Only prevent default for horizontal scrolling on tables
             const x = e.touches[0].pageX - table.offsetLeft;
             const walk = (x - startX) * 2;
             table.scrollLeft = scrollLeft - walk;
+            e.preventDefault();
         });
 
         table.addEventListener('touchend', () => {
@@ -98,19 +99,23 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.body.appendChild(refreshIndicator);
 
-    document.addEventListener('touchstart', (e) => {
-        touchStartY = e.touches[0].screenY;
-    }, false);
+    // Only enable pull-to-refresh on specific containers, not globally
+    const refreshContainer = document.querySelector('.enable-pull-refresh');
+    if (refreshContainer) {
+        refreshContainer.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].screenY;
+        }, false);
 
-    document.addEventListener('touchend', (e) => {
-        touchEndY = e.changedTouches[0].screenY;
-        handlePullToRefresh();
-    }, false);
+        refreshContainer.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].screenY;
+            handlePullToRefresh();
+        }, false);
 
-    function handlePullToRefresh() {
-        if (window.scrollY === 0 && touchEndY > touchStartY + pullThreshold) {
-            refreshIndicator.classList.remove('hidden');
-            window.location.reload();
+        function handlePullToRefresh() {
+            if (window.scrollY === 0 && touchEndY > touchStartY + pullThreshold) {
+                refreshIndicator.classList.remove('hidden');
+                window.location.reload();
+            }
         }
     }
 });

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Projektet;
-use Illuminate\Support\Facades\Log;
 use App\Models\Klientet;
 use App\Models\DokumentetProjekti;
 use App\Models\StatusetProjektit;
@@ -13,6 +12,7 @@ use App\Traits\LogsProjectActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Http\Requests\StoreProjektRequest;
 
@@ -244,7 +244,8 @@ class ProjektetController extends Controller
                 'status_id' => $request->status_id ?? 1, // status fillestar "pending" nëse nuk është specifikuar
                 'mjeshtri_caktuar_id' => $request->mjeshtri_caktuar_id,
                 'montuesi_caktuar_id' => $request->montuesi_caktuar_id,
-                'shenime_projekt' => $request->shenime_projekt
+                'shenime_projekt' => $request->shenime_projekt,
+                'krijues_id' => auth('web')->user()->perdorues_id
             ]);
 
             // Ruaj veprimin në ditar
@@ -272,7 +273,7 @@ class ProjektetController extends Controller
                         'lloji_skedarit' => $file->getClientMimeType(),
                         'rruga_skedarit' => $path,
                         'madhesia_skedarit' => $file->getSize(),
-                        'perdorues_id_ngarkues' => auth()->user()->perdorues_id,
+                        'perdorues_id_ngarkues' => auth('web')->user()->perdorues_id,
                         'data_ngarkimit' => now()
                     ]);
 
@@ -302,6 +303,10 @@ class ProjektetController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             
+            // Log the actual error for debugging
+            Log::error('Project creation failed: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            
             // Fshij skedarët e ngarkuar nëse ka
             if (isset($projekti) && $request->hasFile('files')) {
                 Storage::disk('public')->deleteDirectory('projektet/' . $projekti->projekt_id);
@@ -310,7 +315,7 @@ class ProjektetController extends Controller
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Ndodhi një gabim gjatë krijimit të projektit. Ju lutem provoni përsëri.');
+                ->with('error', 'Ndodhi një gabim gjatë krijimit të projektit: ' . $e->getMessage());
         }
     }
 
