@@ -284,9 +284,15 @@
                                         @if($isExcelDoc)
                                             <a href="{{ route('projektet.dokumentet.download', ['projekt' => $projekt->projekt_id, 'id' => $dokument->dokument_id ?? 0]) }}" 
                                                class="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-200"
-                                               title="Shkarko dhe hape në Google Sheets">
+                                               download="{{ $dokument->emri_skedarit }}"
+                                               title="Shkarko Excel">
                                                 <i class="fas fa-file-excel mr-1"></i> Excel
                                             </a>
+                                            <button onclick="openInSheets('{{ route('projektet.dokumentet.download', ['projekt' => $projekt->projekt_id, 'id' => $dokument->dokument_id ?? 0]) }}', '{{ $dokument->emri_skedarit }}')"
+                                                    class="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200"
+                                                    title="Hap në Google Sheets (Mobile)">
+                                                <i class="fab fa-google mr-1"></i> Sheets
+                                            </button>
                                         @endif
                                         
                                         <a href="{{ route('projektet.dokumentet.download', ['projekt' => $projekt->projekt_id, 'id' => $dokument->dokument_id ?? 0]) }}" class="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
@@ -804,6 +810,36 @@
                 });
             }
         });
+        
+        // Function to open Excel in Google Sheets (Mobile-friendly)
+        function openInSheets(fileUrl, fileName) {
+            // Show instructions for mobile users
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // For mobile: Show instructions
+                alert('Për të hapur në Google Sheets:\n\n' +
+                      '1. Kliko "Excel" për të shkarkuar file-in\n' +
+                      '2. Hap Google Sheets app\n' +
+                      '3. Kliko + (New)\n' +
+                      '4. Zgjidh "Upload"\n' +
+                      '5. Zgjidh file-in e shkarkuar\n\n' +
+                      'Ose përdor Google Drive app për ta hapur direkt.');
+                
+                // Try to open Google Sheets app with intent (Android)
+                if (/Android/i.test(navigator.userAgent)) {
+                    window.location.href = 'intent://docs.google.com/spreadsheets/#Intent;scheme=https;package=com.google.android.apps.docs.editors.sheets;end';
+                }
+            } else {
+                // For desktop: Open Google Sheets and show upload instructions
+                window.open('https://docs.google.com/spreadsheets/create', '_blank');
+                alert('Google Sheets u hap në një tab të ri.\n\n' +
+                      'Për të importuar file-in:\n' +
+                      '1. Kliko File → Import\n' +
+                      '2. Zgjidh "Upload"\n' +
+                      '3. Drag & drop ose zgjidh file-in');
+            }
+        }
     </script>
     @endpush
 </x-app-layout>
