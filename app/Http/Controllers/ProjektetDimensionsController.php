@@ -492,6 +492,11 @@ class ProjektetDimensionsController extends Controller
                 $firstDim = $materialDimensions->first();
                 $materiali = $firstDim->materiali;
                 $trashesia = $firstDim->trashesia;
+                
+                // Skip if no material
+                if (!$materiali) {
+                    continue;
+                }
 
                 // Konverto në mm nëse është në cm ose m
                 $thickness = $this->convertToMM($trashesia, $firstDim->njesi_matese);
