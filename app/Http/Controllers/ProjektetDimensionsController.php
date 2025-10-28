@@ -484,7 +484,8 @@ class ProjektetDimensionsController extends Controller
             
             // Grupo sipas materialit dhe trashësisë
             $materialGroups = $dimensions->groupBy(function($dim) {
-                return $dim->materiali->emri_materialit . '_' . $dim->trashesia;
+                $materialName = $dim->materiali ? $dim->materiali->emri_materialit : 'Unknown';
+                return $materialName . '_' . $dim->trashesia;
             });
 
             foreach ($materialGroups as $materialKey => $materialDimensions) {
