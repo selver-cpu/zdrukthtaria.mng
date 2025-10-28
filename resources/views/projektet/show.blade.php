@@ -170,7 +170,7 @@
                                         file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0
                                         file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700
                                         hover:file:bg-indigo-100" required />
-                                    <p class="mt-1 text-sm text-gray-500" id="file-upload-helper">Formate të lejuara: JPEG, PNG, PDF, Word, Excel, CAD, 3D (max 200MB)</p>
+                                    <p class="mt-1 text-sm text-gray-500" id="file-upload-helper">Formate të lejuara: Imazhe (JPG, PNG, GIF, BMP, SVG, WEBP), PDF, Word (DOC, DOCX), Excel (XLS, XLSX, CSV), CAD (DWG, DXF), 3D (STL, OBJ, FBX, STEP, IGES), ZIP, RAR (max 200MB)</p>
                                     <div id="uploadError" class="text-sm text-red-600 mt-2"></div>
                                     <x-input-error :messages="$errors->get('dokument')" class="mt-2" />
                                 </div>
@@ -214,9 +214,10 @@
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Dokumentet e Bashkangjitura</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             @forelse($projekt->dokumentet as $index => $dokument)
-                                <div class="border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow document-item p-4" 
+                                <div class="border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow dokument-item p-4" 
                                      data-index="{{ $index }}" 
-                                     data-id="{{ $dokument->dokument_id ?? 0 }}">
+                                     data-id="{{ $dokument->dokument_id ?? 0 }}"
+                                     data-kategoria="{{ ucfirst($dokument->kategoria ?? 'Tjetër') }}">
                                     @php
                                         $extension = strtolower(pathinfo($dokument->emri_skedarit ?? '', PATHINFO_EXTENSION));
                                         $isImage = in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg']);
@@ -688,20 +689,34 @@
                     const file = this.files[0];
                     if (!file) return;
 
-                    // Validate file type
-                    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'application/msword', 
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                        'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+                    // Validate file type - allow most common file types
+                    const allowedExtensions = [
+                        // Images
+                        'jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'tiff', 'ico',
+                        // Documents
+                        'pdf', 'doc', 'docx', 'txt', 'rtf', 'odt',
+                        // Spreadsheets
+                        'xls', 'xlsx', 'csv', 'ods',
+                        // CAD files
+                        'dwg', 'dxf', 'dwf',
+                        // 3D files
+                        'stl', 'obj', 'fbx', 'step', 'stp', 'iges', 'igs', '3ds', 'blend', 'dae', 'gltf', 'glb',
+                        // Archives
+                        'zip', 'rar', '7z', 'tar', 'gz',
+                        // Other
+                        'ppt', 'pptx', 'xml', 'json'
+                    ];
                     
-                    if (!allowedTypes.includes(file.type)) {
-                        showError('Lloji i skedarit nuk lejohet. Ju lutem ngarkoni vetëm foto, PDF ose dokumente Office.');
+                    const fileExtension = file.name.split('.').pop().toLowerCase();
+                    if (!allowedExtensions.includes(fileExtension)) {
+                        showError('Lloji i skedarit "' + fileExtension + '" nuk lejohet. Shiko formatet e lejuara më poshtë.');
                         return;
                     }
 
-                    // Validate file size (10MB max)
-                    const maxSize = 10 * 1024 * 1024; // 10MB
+                    // Validate file size (200MB max)
+                    const maxSize = 200 * 1024 * 1024; // 200MB
                     if (file.size > maxSize) {
-                        showError('Madhësia maksimale e lejuar për skedarët është 10MB.');
+                        showError('Madhësia maksimale e lejuar për skedarët është 200MB.');
                         return;
                     }
 

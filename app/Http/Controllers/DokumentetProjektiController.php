@@ -32,7 +32,7 @@ class DokumentetProjektiController extends Controller
     public function store(Request $request, Projektet $projekt)
     {
         $request->validate([
-            'dokument' => 'required|file|mimes:jpg,jpeg,png,gif,webp,bmp,svg,pdf,doc,docx,xls,xlsx,zip,tar,gz,7z,stl,step,skp,dwg,3ds,obj,fbx,dae,rar,txt,csv,html,htm,css,js,json,xml,md,ppt,pptx,rtf,odt|max:512000', // max 500MB
+            'dokument' => 'required|file|mimes:jpg,jpeg,png,gif,webp,bmp,svg,tiff,ico,pdf,doc,docx,xls,xlsx,csv,ods,zip,tar,gz,7z,rar,stl,step,stp,iges,igs,skp,dwg,dxf,dwf,3ds,obj,fbx,dae,blend,gltf,glb,txt,html,htm,css,js,json,xml,md,ppt,pptx,rtf,odt,odp|max:204800', // max 200MB
             'pershkrimi' => 'nullable|string|max:255',
             'kategoria' => 'nullable|string|in:vizatim,dimension,material,3d_model,excel,foto,prezantim,arkiv,tjeter',
         ]);
@@ -55,7 +55,7 @@ class DokumentetProjektiController extends Controller
                 $kategoria = 'excel';
             } 
             // Modelet 3D dhe vizatimet teknike
-            elseif (in_array($extension, ['stl', 'step', 'skp', 'dwg', '3ds', 'obj', 'fbx', 'dae'])) {
+            elseif (in_array($extension, ['stl', 'step', 'stp', 'iges', 'igs', 'skp', 'dwg', 'dxf', 'dwf', '3ds', 'obj', 'fbx', 'dae', 'blend', 'gltf', 'glb'])) {
                 $kategoria = '3d_model';
             } 
             // Imazhet
