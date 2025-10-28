@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Single>
+<WorkList ID='1' Code='CarpentryApp' Released='2025-09-27 17:59:13' Due='2025-09-27 17:59:13' MaterialID='0'>
+		<Job ID='100' Code='KUZHINA_E_DESTANIT_Anti_Bakterial_18mm_18.00mm_100' Type='PROGRAM' ToWork='9999' QBoards='1' ExeOrder='1' Worked='0' Finished='2025-09-27 17:59:13' Deadline='2025-09-27 17:59:13'>
+		<Board id='1' Code='Anti Bakterial 18mm' L='2800.00' W='2070.00' Thickness='18.00' MatNo='3' MatCode='Anti Bakterial 18mm' Grain='1'/>
+		<Piece N='1' id='1' L='2254.00' W='550.00' Q='3' QPatt='3'/>
+		<Program>
+			<Cut id='1' Code='4' L='550.00' Rep='3'/>
+			<Cut id='2' Code='5' L='2254.00' Rep='3' Chk='98135'/>
+		</Program>
+		</Job>
+
+</WorkList>
+
+</Single>

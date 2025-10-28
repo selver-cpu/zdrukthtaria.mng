@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Single>
+<WorkList ID='1' Code='Default' Released='2001-07-26 15:28:33' Due='2001-07-26 15:28:33' MaterialID='0'>
+		<Job ID='101' Code='Faruki' Type='PROGRAM' ToWork='9999' QBoards='1' ExeOrder='1' Worked='1042' Finished='2007-07-16 08:17:24' Deadline='2007-07-16 08:17:24'>
+		<Board id='1' Code='Default' L='1640.00' W='2800.00' Thickness='14.00' MatNo='0' MatCode='Default' Grain='1'/>
+		<Piece N='1' id='0' L='1500.00' W='1200.00' Q='1' QPatt='1'/>
+		<Program >
+			<Cut id='1' Code='4' L='1200.00' Rep='1'/>
+			<Cut id='2' Code='5' L='1500.00' Rep='1' Chk='4592'/>
+		</Program>
+		</Job>
+		<Job ID='102' Code='Prog008' Type='PROGRAM' ToWork='9999' QBoards='1' ExeOrder='2' Worked='993' Finished='2007-07-16 09:13:11' Deadline='2007-07-16 09:13:11'>
+		<Board id='1' Code='Default' L='2070.00' W='314.00' Thickness='18.00' MatNo='0' MatCode='Default' Grain='1'/>
+		<Piece N='1' id='0' L='339.00' W='100.00' Q='1' QPatt='1'/>
+		<Piece N='2' id='0' L='488.00' W='100.00' Q='2' QPatt='2'/>
+		<Piece N='3' id='0' L='2064.00' W='150.00' Q='1' QPatt='1'/>
+		<Program >
+			<Cut id='1' Code='4' L='100.00' Rep='1'/>
+			<Cut id='2' Code='5' L='339.00' Rep='1'/>
+			<Cut id='3' Code='5' L='488.00' Rep='2'/>
+			<Cut id='4' Code='4' L='150.00' Rep='1'/>
+			<Cut id='5' Code='5' L='2064.00' Rep='1' Chk='10872'/>
+		</Program>
+		</Job>
+		<Job ID='639' Code='Prog009' Type='PROGRAM' ToWork='9999' QBoards='1' ExeOrder='3' Worked='201' Finished='2007-07-16 09:13:11' Deadline='2007-07-16 09:13:11'>
+		<Board id='1' Code='Default' L='2800.00' W='1140.00' Thickness='18.00' MatNo='0' MatCode='Default' Grain='1'/>
+		<Piece N='1' id='0' L='320.00' W='488.00' Q='3' QPatt='3'/>
+		<Piece N='2' id='0' L='2200.00' W='330.00' Q='3' QPatt='3'/>
+		<Program >
+			<Cut id='1' Code='4' L='330.00' Rep='2'/>
+			<Cut id='2' Code='5' L='488.00' Rep='1'/>
+			<Cut id='3' Code='Z1' L='320.00' Rep='1'/>
+			<Cut id='4' Code='5' L='2200.00' Rep='1'/>
+			<Cut id='5' Code='4' L='330.00' Rep='1'/>
+			<Cut id='6' Code='5' L='488.00' Rep='1'/>
+			<Cut id='7' Code='Z1' L='320.00' Rep='1'/>
+			<Cut id='8' Code='5' L='2200.00' Rep='1' Chk='19844'/>
+		</Program>
+		</Job>
+		<Job ID='1813' Code='Prog006' Type='PROGRAM' ToWork='1' QBoards='1' ExeOrder='4' Worked='1' Finished='2025-01-28 15:11:54' Deadline='2025-01-28 15:11:54'>
+		<Board id='1' Code='Default' L='2800.00' W='650.00' Thickness='14.00' MatNo='0' MatCode='Default' Grain='1'/>
+		<Piece N='1' id='0' L='2504.00' W='95.00' Q='1' QPatt='1'/>
+		<Piece N='2' id='0' L='200.00' W='200.00' Q='4' QPatt='4'/>
+		<Piece N='3' id='0' L='728.00' W='497.00' Q='3' QPatt='3'/>
+		<Program >
+			<Cut id='1' Code='4' L='95.00' Rep='1'/>
+			<Cut id='2' Code='5' L='2504.00' Rep='1'/>
+			<Cut id='3' Code='4' L='497.00' Rep='1'/>
+			<Cut id='4' Code='5' L='200.00' Rep='2'/>
+			<Cut id='5' Code='Z1' L='200.00' Rep='2'/>
+			<Cut id='6' Code='5' L='728.00' Rep='3' Chk='13044'/>
+		</Program>
+		</Job>
+
+</WorkList>
+
+</Single>

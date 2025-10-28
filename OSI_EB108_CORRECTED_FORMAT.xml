@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Single>
+<WorkList ID='1' Code='CarpentryApp' Released='2025-10-02 00:30:00' Due='2025-10-02 00:30:00' MaterialID='0'>
+		<Job ID='100' Code='TEST_PROJECT_100' Type='PROGRAM' ToWork='9999' QBoards='1' ExeOrder='1' Worked='0' Finished='2025-10-02 00:30:00' Deadline='2025-10-02 00:30:00'>
+		<Board id='1' Code='MDF 18mm' L='2800.00' W='2070.00' Thickness='18.00' MatNo='1' MatCode='MDF 18mm' Grain='1'/>
+		<Piece N='1' id='1' L='600.00' W='400.00' Q='2' QPatt='2' E1='1' E3='1'/>
+		<Piece N='2' id='2' L='800.00' W='350.00' Q='1' QPatt='1' E1='1' E2='1' E3='1' E4='1'/>
+		<Program>
+			<Cut id='1' Code='4' L='400.00' Rep='2'/>
+			<Cut id='2' Code='5' L='600.00' Rep='2'/>
+			<Cut id='3' Code='4' L='350.00' Rep='1'/>
+			<Cut id='4' Code='5' L='800.00' Rep='1' Chk='12345'/>
+		</Program>
+		</Job>
+
+</WorkList>
+
+</Single>

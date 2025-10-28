@@ -1,0 +1,170 @@
+/* Touch-specific styles */
+.touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.touch-scroll-table {
+    overflow-x: auto;
+    position: relative;
+}
+
+.touch-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 600ms linear;
+    background-color: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.refresh-indicator {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    z-index: 50;
+    transition: opacity 150ms ease-in-out;
+}
+
+.refresh-indicator.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Touch-friendly form elements */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    touch-action: manipulation;
+}
+
+/* Larger touch targets for mobile */
+.touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Active state for touch devices */
+@media (hover: none) {
+    .touch-active:active {
+        background-color: rgba(0, 0, 0, 0.1);
+        transition: background-color 0s;
+    }
+}
+
+/* Improved scrolling on iOS */
+.touch-scroll {
+    scroll-behavior: smooth;
+    overscroll-behavior-y: contain;
+}
+
+/* Disable pull-to-refresh on iOS */
+.disable-pull-refresh {
+    overscroll-behavior-y: contain;
+    height: 100%;
+    width: 100%;
+}
+
+/* Touch-friendly table styles */
+.touch-table {
+    border-spacing: 0;
+    width: 100%;
+}
+
+.touch-table th,
+.touch-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.touch-table tr {
+    transition: background-color 0.2s ease;
+}
+
+.touch-table tbody tr:active {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 640px) {
+    .touch-stack {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .touch-stack > * + * {
+        margin-top: 1rem;
+    }
+}
+
+/* Touch-friendly modal */
+.touch-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.touch-modal-content {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Touch-friendly buttons */
+.touch-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.1s ease;
+}
+
+.touch-button:active {
+    transform: scale(0.98);
+}
