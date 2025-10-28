@@ -18,6 +18,7 @@ use App\Http\Controllers\ProcesiProjektitController;
 use App\Http\Controllers\ProjektetDimensionsController;
 use App\Http\Controllers\TicketLayoutController;
 use App\Http\Controllers\CutlistOptimizerController;
+use App\Http\Controllers\CuttingOptimizationController;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -162,4 +163,12 @@ Route::prefix('cutlist-optimizer')->name('cutlist-optimizer.')->middleware(['aut
     Route::get('/', [CutlistOptimizerController::class, 'index'])->name('index');
     Route::post('/optimize', [CutlistOptimizerController::class, 'optimize'])->name('optimize');
     Route::get('/result/{id}', [CutlistOptimizerController::class, 'showResult'])->name('result');
+});
+
+// Routes for Cutting Optimization (XML Import/Export)
+Route::prefix('cutting-optimization')->name('cutting-optimization.')->middleware(['auth'])->group(function () {
+    Route::get('/', [CuttingOptimizationController::class, 'index'])->name('index');
+    Route::get('/{projekt}/export', [CuttingOptimizationController::class, 'export'])->name('export');
+    Route::post('/{projekt}/import', [CuttingOptimizationController::class, 'import'])->name('import');
+    Route::get('/{projekt}/visualize', [CuttingOptimizationController::class, 'visualize'])->name('visualize');
 });
