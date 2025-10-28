@@ -282,8 +282,10 @@
                                         @endif
                                         
                                         @if($isExcelDoc)
-                                            <a href="{{ $viewUrl }}" target="_blank" class="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-200">
-                                                <i class="fas fa-table mr-1"></i> Hap në Sheets
+                                            <a href="{{ route('projektet.dokumentet.download', ['projekt' => $projekt->projekt_id, 'id' => $dokument->dokument_id ?? 0]) }}" 
+                                               class="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-200"
+                                               title="Shkarko dhe hape në Google Sheets">
+                                                <i class="fas fa-file-excel mr-1"></i> Excel
                                             </a>
                                         @endif
                                         
