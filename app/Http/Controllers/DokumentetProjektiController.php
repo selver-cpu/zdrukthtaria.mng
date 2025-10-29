@@ -138,11 +138,7 @@ class DokumentetProjektiController extends Controller
                                      ->where('dokument_id', $id)
                                      ->firstOrFail();
         
-        // Kontrollo nëse përdoruesi ka të drejta për të parë dokumentin
-        if (Auth::id() !== $dokument->perdorues_id_ngarkues && 
-            !in_array(Auth::user()->rol_id ?? 0, [1, 2])) { // 1 = admin, 2 = menaxher
-            abort(403, 'Nuk keni leje për të parë këtë dokument.');
-        }
+        // Të gjithë përdoruesit e autentifikuar mund të shohin dokumentet
         
         $path = storage_path('app/public/' . $dokument->rruga_skedarit);
         
@@ -170,11 +166,7 @@ class DokumentetProjektiController extends Controller
                                      ->where('dokument_id', $id)
                                      ->firstOrFail();
         
-        // Kontrollo nëse përdoruesi ka të drejta për të shkarkuar dokumentin
-        if (Auth::id() !== $dokument->perdorues_id_ngarkues && 
-            !in_array(Auth::user()->rol_id ?? 0, [1, 2])) {
-            return back()->with('error', 'Nuk keni të drejta për të shkarkuar këtë dokument.');
-        }
+        // Të gjithë përdoruesit e autentifikuar mund të shkarkojnë dokumentet
         
         // Shkarko skedarin fizik
         if (Storage::disk('public')->exists($dokument->rruga_skedarit)) {
