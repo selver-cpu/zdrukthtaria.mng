@@ -14,6 +14,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(\App\Services\CuttingOptimizationService::class, function ($app) {
             return new \App\Services\CuttingOptimizationService();
         });
+        
+        $this->app->singleton(\App\Services\SmsService::class, function ($app) {
+            return new \App\Services\SmsService();
+        });
     }
 
     /**
