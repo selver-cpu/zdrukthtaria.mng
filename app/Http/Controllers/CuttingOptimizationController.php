@@ -26,7 +26,7 @@ class CuttingOptimizationController extends Controller
         $visualization = [];
         
         if ($projektId) {
-            $projekt = Projektet::with(['dimensions.material'])->findOrFail($projektId);
+            $projekt = Projektet::with(['dimensions.materiali'])->findOrFail($projektId);
             $visualization = $this->cuttingService->generateVisualization($projekt);
         }
         

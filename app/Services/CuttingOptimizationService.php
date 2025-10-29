@@ -36,9 +36,9 @@ class CuttingOptimizationService
             $material = $materials->addChild('Material');
             
             $material->addChild('ID', $materialId);
-            $material->addChild('Name', htmlspecialchars($firstDim->material->emri_materialit ?? 'Unknown'));
+            $material->addChild('Name', htmlspecialchars($firstDim->materiali->emri_materialit ?? 'Unknown'));
             $material->addChild('Thickness', $firstDim->trashesia ?? 18);
-            $material->addChild('Unit', htmlspecialchars($firstDim->material->njesia_matese ?? 'mm'));
+            $material->addChild('Unit', htmlspecialchars($firstDim->materiali->njesia_matese ?? 'mm'));
             
             // Add pieces for this material
             $pieces = $material->addChild('Pieces');
@@ -168,7 +168,7 @@ class CuttingOptimizationService
     public function generateVisualization(Projektet $projekt): array
     {
         $dimensions = ProjektetDimensions::where('projekt_id', $projekt->projekt_id)
-            ->with('material')
+            ->with('materiali')
             ->get();
         
         $sheets = [];
@@ -182,7 +182,7 @@ class CuttingOptimizationService
                 'width' => $dimension->gjeresia,
                 'thickness' => $dimension->trashesia,
                 'quantity' => $dimension->sasia,
-                'material' => $dimension->material->emri_materialit ?? 'Unknown',
+                'material' => $dimension->materiali->emri_materialit ?? 'Unknown',
                 'label' => $dimension->pershkrimi ?? 'Piece ' . $dimension->id,
                 'color' => $colors[$colorIndex % count($colors)],
                 'area' => ($dimension->gjatesia * $dimension->gjeresia) / 1000000 // m²
