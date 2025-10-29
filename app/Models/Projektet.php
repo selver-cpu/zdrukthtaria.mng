@@ -84,6 +84,11 @@ class Projektet extends Model
         return $this->hasMany(DokumentetProjekti::class, 'projekt_id', 'projekt_id');
     }
 
+    public function dimensions()
+    {
+        return $this->hasMany(ProjektetDimensions::class, 'projekt_id', 'projekt_id');
+    }
+
     public function njoftime()
     {
         return $this->hasMany(Njoftimet::class, 'projekt_id', 'projekt_id');
