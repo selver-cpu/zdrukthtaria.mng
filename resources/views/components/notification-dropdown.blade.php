@@ -27,7 +27,7 @@
         <div class="max-h-[70vh] overflow-y-auto overscroll-contain">
             <h3 class="px-4 py-2 text-lg font-medium text-gray-900 border-b border-gray-100">Njoftimet</h3>
             @forelse(Auth::user()->njoftimet()->latest('data_krijimit')->take(5)->get() as $njoftim)
-                <a href="{{ $njoftim->link ? route('njoftimet.redirect', $njoftim) : '#' }}" 
+                <a href="{{ route('njoftimet.markAsRead', $njoftim->njoftim_id) }}" 
                    class="block px-4 py-4 hover:bg-gray-50 active:bg-gray-100 transition ease-in-out duration-150 {{ !$njoftim->lexuar ? 'bg-blue-50' : '' }} border-b border-gray-100 last:border-b-0">
                     <div class="flex items-center">
                         @if(!$njoftim->lexuar)
