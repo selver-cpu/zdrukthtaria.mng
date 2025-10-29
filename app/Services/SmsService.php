@@ -13,11 +13,10 @@ class SmsService
 
     public function __construct()
     {
-        // Konfiguro për SMS gateway të Kosovës/Shqipërisë
-        // Mund të përdorësh: Twilio, Nexmo, ose një provider lokal
-        $this->apiUrl = env('SMS_API_URL', 'https://api.sms-provider.com/send');
-        $this->apiKey = env('SMS_API_KEY', '');
-        $this->sender = env('SMS_SENDER', 'ColiDecor');
+        // ZitaSMS - SMS Gateway për Kosovë dhe Shqipëri
+        $this->apiUrl = env('SMS_API_URL', 'https://api.zitasms.com/api/send');
+        $this->apiKey = env('ZITASMS_API_KEY', '');
+        $this->sender = env('ZITASMS_SENDER_ID', 'ColiDecor');
     }
 
     /**
@@ -39,13 +38,11 @@ class SmsService
                 return false;
             }
 
-            // Dërgo SMS përmes API
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $this->apiKey,
-                'Content-Type' => 'application/json',
-            ])->post($this->apiUrl, [
-                'to' => $phoneNumber,
-                'from' => $this->sender,
+            // Dërgo SMS përmes ZitaSMS API
+            $response = Http::asForm()->post($this->apiUrl, [
+                'api_key' => $this->apiKey,
+                'sender_id' => $this->sender,
+                'recipient' => $phoneNumber,
                 'message' => $message,
             ]);
 
