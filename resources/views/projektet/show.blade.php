@@ -22,6 +22,9 @@
                             <a href="{{ route('projektet-dimensions.material-report') . '?projekt_id=' . $projekt->projekt_id }}" class="btn btn-outline-secondary">
                                 <i class="fas fa-clipboard-list me-2"></i> Raport Materiale
                             </a>
+                            <a href="{{ route('cutting-optimization.index') . '?projekt_id=' . $projekt->projekt_id }}" class="btn btn-outline-warning">
+                                <i class="fas fa-cut me-2"></i> Optimizimi
+                            </a>
                             <a href="{{ route('projektet.email-form', $projekt->projekt_id) }}" class="btn btn-primary">
                                 <i class="fas fa-envelope me-2"></i> Dërgo Email
                             </a>
