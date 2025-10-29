@@ -11,45 +11,36 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-3 sm:-my-px sm:ml-6 sm:flex items-center">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="block">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="hidden space-x-1 sm:-my-px sm:ml-4 sm:flex items-center text-sm">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="block px-2 py-2" title="Dashboard">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                         </svg>
-                        {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('projektet.index')" :active="request()->routeIs('projektet.*')" class="block">
+                    <x-nav-link :href="route('projektet.index')" :active="request()->routeIs('projektet.*')" class="block px-2 py-2">
                         {{ __('Projektet') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('klientet.index')" :active="request()->routeIs('klientet.*')" class="block">
+                    <x-nav-link :href="route('klientet.index')" :active="request()->routeIs('klientet.*')" class="block px-2 py-2">
                         {{ __('Klientët') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('statuset.index')" :active="request()->routeIs('statuset.*')" class="block">
-                        {{ __('Statuset') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('materialet.index')" :active="request()->routeIs('materialet.index')" class="block">
+                    <x-nav-link :href="route('materialet.index')" :active="request()->routeIs('materialet.index')" class="block px-2 py-2">
                         {{ __('Materialet') }}
                     </x-nav-link>
                     @if(auth()->check() && auth()->user()->hasRole('administrator'))
-                        <x-nav-link :href="route('stafi.index')" :active="request()->routeIs('stafi.index')" class="block">
+                        <x-nav-link :href="route('stafi.index')" :active="request()->routeIs('stafi.index')" class="block px-2 py-2">
                             {{ __('Stafi') }}
                         </x-nav-link>
                     @endif
-                    <x-nav-link :href="route('fazat-projekti.index')" :active="request()->routeIs('fazat-projekti.index')" class="block">
-                        {{ __('Fazat e Projektit') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('raportet.index')" :active="request()->routeIs('raportet.*')" class="block">
+                    <x-nav-link :href="route('raportet.index')" :active="request()->routeIs('raportet.*')" class="block px-2 py-2">
                         {{ __('Raportet') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('cutting-optimization.index')" :active="request()->routeIs('cutting-optimization.*')" class="block">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <x-nav-link :href="route('cutting-optimization.index')" :active="request()->routeIs('cutting-optimization.*')" class="block px-2 py-2" title="Optimizimi i Prerjes">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
                         </svg>
-                        {{ __('Optimizimi') }}
                     </x-nav-link>
-                    {{-- Moduli i planifikimit të rafteve u hoq --}}
                     @can('view-ditar')
-                    <x-nav-link :href="route('ditar.index')" :active="request()->routeIs('ditar.index')" class="block;">
+                    <x-nav-link :href="route('ditar.index')" :active="request()->routeIs('ditar.index')" class="block px-2 py-2">
                         {{ __('Ditari') }}
                     </x-nav-link>
                     @endcan
