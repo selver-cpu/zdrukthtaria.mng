@@ -23,8 +23,14 @@
                     <x-nav-link :href="route('klientet.index')" :active="request()->routeIs('klientet.*')" class="block px-2 py-2">
                         {{ __('Klientët') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('statuset.index')" :active="request()->routeIs('statuset.*')" class="block px-2 py-2">
+                        {{ __('Statuset') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('materialet.index')" :active="request()->routeIs('materialet.index')" class="block px-2 py-2">
                         {{ __('Materialet') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('fazat-projekti.index')" :active="request()->routeIs('fazat-projekti.index')" class="block px-2 py-2">
+                        {{ __('Fazat') }}
                     </x-nav-link>
                     @if(auth()->check() && auth()->user()->hasRole('administrator'))
                         <x-nav-link :href="route('stafi.index')" :active="request()->routeIs('stafi.index')" class="block px-2 py-2">
