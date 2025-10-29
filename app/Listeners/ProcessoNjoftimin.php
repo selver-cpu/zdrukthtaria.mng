@@ -10,9 +10,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
-class ProcessoNjoftimin implements ShouldQueue
+class ProcessoNjoftimin // implements ShouldQueue
 {
-    use InteractsWithQueue;
+    // use InteractsWithQueue;
 
     /**
      * Create the event listener.
