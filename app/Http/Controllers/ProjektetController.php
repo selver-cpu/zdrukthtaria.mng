@@ -590,20 +590,19 @@ class ProjektetController extends Controller
             }
 
             // Attach material to project with quantity
+            // Note: projekt_materiale only has sasia_perdorur (no pershkrimi/timestamps)
             $projekt->materialet()->attach($validated['material_id'], [
                 'sasia_perdorur' => $validated['sasia_perdorur'],
-                'pershkrimi' => $validated['pershkrimi'] ?? null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
 
-            // Log the action
+            // Log the action (include optional notes in the activity log, not the pivot)
             $this->logProjectAction(
                 $projekt->projekt_id,
                 'Materiali u shtua në projekt',
                 [
                     'material_id' => $validated['material_id'],
-                    'sasia_perdorur' => $validated['sasia_perdorur']
+                    'sasia_perdorur' => $validated['sasia_perdorur'],
+                    'pershkrimi' => $validated['pershkrimi'] ?? null,
                 ]
             );
 
@@ -626,9 +625,6 @@ class ProjektetController extends Controller
                 'success' => false,
                 'message' => 'Ndodhi një gabim gjatë ruajtjes së materialit.'
             ], 500);
-            
-            return redirect()->back()
-                ->with('error', 'Ndodhi një gabim gjatë shtimit të materialit. Ju lutemi provoni përsëri.');
         }
     }
 
@@ -641,11 +637,9 @@ class ProjektetController extends Controller
 
         $projekt = Projektet::findOrFail($projektId);
         
-        // Update the pivot record
+        // Update the pivot record (only columns that exist on projekt_materiale)
         $projekt->materialet()->updateExistingPivot($materialId, [
             'sasia_perdorur' => $request->sasia_perdorur,
-            'pershkrimi' => $request->pershkrimi,
-            'updated_at' => now(),
         ]);
 
         // Log the action
@@ -654,7 +648,8 @@ class ProjektetController extends Controller
             'Materiali u përditësua',
             [
                 'material_id' => $materialId,
-                'sasia_perdorur' => $request->sasia_perdorur
+                'sasia_perdorur' => $request->sasia_perdorur,
+                'pershkrimi' => $request->pershkrimi,
             ]
         );
 

@@ -4,15 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Projektet;
 use App\Models\ProjektMateriale;
+use App\Traits\LogsProjectActions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class ProjektMaterialeController extends Controller
 {
+    use LogsProjectActions;
+
     public function store(Request $request, Projektet $projekt)
     {
         try {
-            $request->validate([
+            $validated = $request->validate([
                 'material_id' => [
                     'required',
                     'exists:materialet,material_id',
@@ -22,11 +27,25 @@ class ProjektMaterialeController extends Controller
                     }),
                 ],
                 'sasia_perdorur' => 'required|numeric|min:0.01',
+                'pershkrimi' => 'nullable|string',
             ], [
                 'material_id.unique' => 'Ky material është shtuar tashmë në këtë projekt.',
             ]);
 
-            $projekt->materialet()->attach($request->material_id, ['sasia_perdorur' => $request->sasia_perdorur]);
+            // projekt_materiale only has sasia_perdorur as pivot data
+            $projekt->materialet()->attach($validated['material_id'], [
+                'sasia_perdorur' => $validated['sasia_perdorur'],
+            ]);
+
+            $this->logProjectAction(
+                $projekt->projekt_id,
+                'Materiali u shtua në projekt',
+                [
+                    'material_id' => $validated['material_id'],
+                    'sasia_perdorur' => $validated['sasia_perdorur'],
+                    'pershkrimi' => $validated['pershkrimi'] ?? null,
+                ]
+            );
             
             if ($request->expectsJson()) {
                 return response()->json([
@@ -36,15 +55,28 @@ class ProjektMaterialeController extends Controller
             }
             
             return back()->with('success', 'Materiali u shtua me sukses në projekt.');
-        } catch (\Exception $e) {
+        } catch (ValidationException $e) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => $e->getMessage()
+                    'message' => collect($e->errors())->flatten()->first() ?? 'Të dhënat nuk janë valide',
+                    'errors' => $e->errors(),
                 ], 422);
             }
+
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Error adding material to project: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ndodhi një gabim gjatë ruajtjes së materialit.'
+                ], 500);
+            }
             
-            return back()->withErrors(['error' => $e->getMessage()])->withInput();
+            return back()->withErrors(['error' => 'Ndodhi një gabim gjatë shtimit të materialit.'])->withInput();
         }
     }
 

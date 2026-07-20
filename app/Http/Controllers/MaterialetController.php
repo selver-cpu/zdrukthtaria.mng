@@ -55,6 +55,13 @@ class MaterialetController extends Controller
         if ($redirect = $this->checkMaterialManagementAccess()) {
             return $redirect;
         }
+
+        // Convert empty numeric fields to null (avoids validation/DB issues)
+        $request->merge([
+            'sasia_stokut' => $request->filled('sasia_stokut') ? $request->input('sasia_stokut') : null,
+            'sasia_minimale' => $request->filled('sasia_minimale') ? $request->input('sasia_minimale') : null,
+            'cmimi_per_njesi' => $request->filled('cmimi_per_njesi') ? $request->input('cmimi_per_njesi') : null,
+        ]);
         
         $validatedData = $request->validate([
             'emri' => 'required|string|max:255|unique:materialet,emri_materialit',
@@ -70,7 +77,19 @@ class MaterialetController extends Controller
         $validatedData['emri_materialit'] = $validatedData['emri'];
         unset($validatedData['emri']);
 
-        Materialet::create($validatedData);
+        // Defaults for stock fields
+        $validatedData['sasia_stokut'] = $validatedData['sasia_stokut'] ?? 0;
+        $validatedData['sasia_minimale'] = $validatedData['sasia_minimale'] ?? 0;
+
+        try {
+            Materialet::create($validatedData);
+        } catch (\Exception $e) {
+            \Log::error('Error creating material: ' . $e->getMessage());
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Ndodhi një gabim gjatë shtimit të materialit. Ju lutemi provoni përsëri.');
+        }
 
         return redirect()->route('materialet.index')->with('success', 'Materiali u shtua me sukses.');
     }
@@ -105,6 +124,12 @@ class MaterialetController extends Controller
         if ($redirect = $this->checkMaterialManagementAccess()) {
             return $redirect;
         }
+
+        $request->merge([
+            'sasia_stokut' => $request->filled('sasia_stokut') ? $request->input('sasia_stokut') : null,
+            'sasia_minimale' => $request->filled('sasia_minimale') ? $request->input('sasia_minimale') : null,
+            'cmimi_per_njesi' => $request->filled('cmimi_per_njesi') ? $request->input('cmimi_per_njesi') : null,
+        ]);
         
         $validatedData = $request->validate([
             'emri' => 'required|string|max:255|unique:materialet,emri_materialit,' . $materialet->material_id . ',material_id',
@@ -120,7 +145,15 @@ class MaterialetController extends Controller
         $validatedData['emri_materialit'] = $validatedData['emri'];
         unset($validatedData['emri']);
 
-        $materialet->update($validatedData);
+        try {
+            $materialet->update($validatedData);
+        } catch (\Exception $e) {
+            \Log::error('Error updating material: ' . $e->getMessage());
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Ndodhi një gabim gjatë përditësimit të materialit. Ju lutemi provoni përsëri.');
+        }
 
         return redirect()->route('materialet.index')->with('success', 'Materiali u modifikua me sukses.');
     }

@@ -21,7 +21,8 @@ trait LogsActivity
         DitarVeprimet::create([
             'perdorues_id' => Auth::id(),
             'veprimi' => $this->getActivityDescription($description),
-            'objekt_id' => $this->id,
+            // Use getKey() so custom primary keys (material_id, projekt_id, etc.) are logged correctly
+            'objekt_id' => $this->getKey(),
             'objekt_tipi' => get_class($this),
             'ip_adresa' => request()->ip(),
         ]);
