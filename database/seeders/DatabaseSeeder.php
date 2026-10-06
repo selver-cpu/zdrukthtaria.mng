@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             KlientetSeeder::class,
             ProjektetSeeder::class,
             DokumentetProjektiSeeder::class,
+            MakinatSeeder::class,
         ]);
     }
 }

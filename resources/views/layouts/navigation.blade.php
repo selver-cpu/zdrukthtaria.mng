@@ -29,6 +29,9 @@
                     <x-nav-link :href="route('materialet.index')" :active="request()->routeIs('materialet.index')" class="block px-2 py-2">
                         {{ __('Materialet') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('makinat.index')" :active="request()->routeIs('makinat.*') || request()->routeIs('mirembajtje.*')" class="block px-2 py-2">
+                        {{ __('Makinat') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('fazat-projekti.index')" :active="request()->routeIs('fazat-projekti.index')" class="block px-2 py-2">
                         {{ __('Fazat') }}
                     </x-nav-link>
@@ -117,6 +120,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('materialet.index')" :active="request()->routeIs('materialet.index')" class="touch-target touch-ripple touch-active">
                 {{ __('Materialet') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('makinat.index')" :active="request()->routeIs('makinat.*') || request()->routeIs('mirembajtje.*')" class="touch-target touch-ripple touch-active">
+                {{ __('Makinat') }}
             </x-responsive-nav-link>
             @if(auth()->check() && auth()->user()->hasRole('administrator'))
                 <x-responsive-nav-link :href="route('stafi.index')" :active="request()->routeIs('stafi.index')" class="touch-target touch-ripple touch-active">
