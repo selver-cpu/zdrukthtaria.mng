@@ -19,6 +19,8 @@ use App\Http\Controllers\ProjektetDimensionsController;
 use App\Http\Controllers\TicketLayoutController;
 use App\Http\Controllers\CutlistOptimizerController;
 use App\Http\Controllers\CuttingOptimizationController;
+use App\Http\Controllers\MakinaController;
+use App\Http\Controllers\MirembajtjeController;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -85,6 +87,20 @@ Route::resource('materialet', MaterialetController::class)->except(['destroy'])-
 Route::delete('materialet/{materialet}', [MaterialetController::class, 'destroy'])->name('materialet.destroy')->middleware('auth');
 Route::resource('stafi', StafiController::class)->middleware(['auth']);
 Route::resource('fazat-projekti', FazatProjektiController::class)->middleware(['auth']);
+
+// Makinat & Mirëmbajtja (CMMS për zdrukthtari)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mirembajtje', [MirembajtjeController::class, 'dashboard'])->name('mirembajtje.dashboard');
+    Route::resource('makinat', MakinaController::class)->parameters(['makinat' => 'makina']);
+
+    Route::post('/makinat/{makina}/planet', [MirembajtjeController::class, 'storePlan'])->name('mirembajtje.store-plan');
+    Route::put('/mirembajtje/planet/{plan}', [MirembajtjeController::class, 'updatePlan'])->name('mirembajtje.update-plan');
+    Route::delete('/mirembajtje/planet/{plan}', [MirembajtjeController::class, 'destroyPlan'])->name('mirembajtje.destroy-plan');
+    Route::post('/mirembajtje/planet/{plan}/complete', [MirembajtjeController::class, 'completePlan'])->name('mirembajtje.complete-plan');
+
+    Route::post('/makinat/{makina}/evidenca', [MirembajtjeController::class, 'storeEvidenca'])->name('mirembajtje.store-evidenca');
+    Route::put('/mirembajtje/evidenca/{evidenca}', [MirembajtjeController::class, 'updateEvidenca'])->name('mirembajtje.update-evidenca');
+});
 
 // Routes for Project Process
 Route::get('projektet/{projekt}/procesi', [ProcesiProjektitController::class, 'index'])->name('procesi.index')->middleware(['auth']);
